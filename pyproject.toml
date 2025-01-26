@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "run-drone-config"
+version = "0.1.0"
+description = "This project is applying the configs to the connected drone using the config file"
+authors = ["Oleh Senyshyn"]
+readme = "README.md"
+packages = [{include = "run_drone_config"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pyserial = "^3.5"
+colorama = "^0.4.6"
+pywifi = "^1.1.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
