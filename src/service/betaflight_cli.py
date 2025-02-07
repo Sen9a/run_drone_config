@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 import traceback
+from src.settings import setting
 
 import serial
 from colorama import Fore, Style
@@ -13,10 +14,10 @@ from src.const import ErrorString, TimeParams, EndResponseMarkers
 @dataclass
 class BetaFlight:
     port: str
-    baudrate: int = 115200
+    baudrate: int = setting.baudrate
     bytesize: 'serial' = serial.EIGHTBITS
     parity: 'serial' = serial.PARITY_NONE
-    timeout: float = 30
+    timeout: float = setting.timeout
     connection: Optional[serial.Serial] = None
     read_wait_max_time: float = TimeParams.READ_WAIT_MAX
     read_all_string_marker: str = EndResponseMarkers.END_OF_BETAFLIGHT_CLI

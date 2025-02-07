@@ -11,6 +11,8 @@ python = "^3.9"
 pyserial = "^3.5"
 colorama = "^0.4.6"
 pywifi = "^1.1.12"
+requests = "^2.32.3"
+fastapi = {extras = ["all"], version = "^0.115.8"}
 
 
 [build-system]
