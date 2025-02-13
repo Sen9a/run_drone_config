@@ -1,4 +1,7 @@
+from dataclasses import dataclass
 from enum import Enum
+from symbol import pass_stmt
+
 
 class ErrorString(str, Enum):
     ERROR = "ERROR"
@@ -24,11 +27,21 @@ class NetworkCommands(str, Enum):
     NAME = "name"
 
 class TimeParams(float, Enum):
-    SEARCH_FOR_WIFI = 5
+    SEARCH_FOR_WIFI = 90
     READ_WAIT_MAX = 5
 
 class EndResponseMarkers(str, Enum):
     END_OF_BETAFLIGHT_CLI = "\n#"
 
-class WifiNames(str, Enum):
-    ExpressLRS = "ExpressLRS RX"
+
+class ExpressLRSWifi(str, Enum):
+    name = "ExpressLRS RX"
+    password = "expresslrs"
+
+class ExpressLRSURL(str, Enum):
+    URL = "http://10.0.0.1/"
+    config = "config"
+    update = "http://10.0.0.1//update"
+    forceupdate = "forceupdate"
+    reboot = "reboot"
+

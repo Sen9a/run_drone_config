@@ -1,3 +1,4 @@
+import subprocess
 import time
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
@@ -24,15 +25,14 @@ class WifiConfig:
         time.sleep(3)
         return self.interface.scan_results()
 
-    def connect_to_wifi(self, name: str, password: str):
+    def disconnect_wifi(self):
         self.interface.disconnect()
-        profile = pywifi.Profile()
-        profile.ssid = name
-        profile.auth = const.AUTH_ALG_OPEN
-        profile.akm.append(const.AKM_TYPE_WPA2PSK)
-        profile.cipher = const.CIPHER_TYPE_CCMP
-        if password:
-            profile.key = password
-        profile = self.interface.add_network_profile(profile)
-        self.interface.connect(profile)
+
+    @staticmethod
+    def connect_to_wifi(name: str, password: str):
+        try:
+            subprocess.run(["nmcli", "dev", "wifi", "connect", name, "password", password], check=True)
+            print(f"Connected to {name} successfully!")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
