@@ -20,6 +20,7 @@ class BetaFlightClient:
                 yield self
         except Exception as e:
             print(f'Error occurred while connecting to {self.service.port} error: {e}')
+            raise e
 
     @contextmanager
     def cli_mode(self) -> None:
@@ -28,7 +29,6 @@ class BetaFlightClient:
             print("Enter cli mode")
             yield
         finally:
-            self.service.execute_command(Commands.EXIT_CLI)
             print("Exit cli mode")
 
     def execute(self, command):

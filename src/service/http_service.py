@@ -1,9 +1,9 @@
 from dataclasses import dataclass
-from typing import Dict, Any
+from http.client import HTTPException
+from typing import Dict, Any, Tuple, Union
 from urllib import parse
 from http import HTTPStatus
 import requests
-import urllib3
 
 
 @dataclass
@@ -11,35 +11,26 @@ class HttpService:
     url: str
 
     @staticmethod
-    def parse_response(response: requests.Response) -> Dict[str, Any]:
-        if response.status_code == HTTPStatus.OK:
-            try:
-                data = response.json()
-                print(data)
-                return data
-            except requests.exceptions.JSONDecodeError as e:
-                print("Response is not valid JSON:", e)
-                print("Response text:", response.text)
+    def parse_response(response: requests.Response) -> Union[Tuple[int, str], Tuple[int, Dict[str, Any]]]:
+        try:
+            data = response.json()
+            print(f'JSON response: {data}')
+            return response.status_code, data
+        except requests.exceptions.JSONDecodeError as e:
+            print("Response is not valid JSON:", e)
+            print("Response text:", response.text)
+            return response.status_code, response.text
 
-    def post(self, patch: str, body: Dict[str, Any], headers: Dict[str, Any] = None) -> Dict[str, Any]:
+    def post(self, patch: str, body: Dict[str, Any], headers: Dict[str, Any] = None) -> Union[Tuple[int, str], Tuple[int, Dict[str, Any]]]:
         url = parse.urljoin(self.url, patch)
         payload = {**body}
         if headers:
             payload = {**payload, "headers": {**headers}}
         response = requests.post(url, **payload)
-        return self.parse_response(response)
+        status_code, data = self.parse_response(response)
+        if status_code in (HTTPStatus.OK, HTTPStatus.CREATED, HTTPStatus.NO_CONTENT):
+            return status_code, data
+        else:
+            raise HTTPException(data)
 
-    def post_http(self, patch: str, body: Dict[str, Any], headers: Dict[str, Any] = None) -> Dict[str, Any]:
-        http = urllib3.PoolManager(timeout=urllib3.Timeout(connect=30, read=60))
-        url = parse.urljoin(self.url, patch)
-        payload = {**body}
-        if headers:
-            payload = {**payload, "headers": {**headers}}
-        response = http.request(
-            'POST',
-            url,
-            **payload
-        )
-        print(response.data.decode('utf-8'))
-        print('test')
 

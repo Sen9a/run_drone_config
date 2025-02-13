@@ -41,7 +41,7 @@ class ExpressLRSWifi(str, Enum):
 class ExpressLRSURL(str, Enum):
     URL = "http://10.0.0.1/"
     config = "config"
-    update = "update"
+    update = "http://10.0.0.1//update"
     forceupdate = "forceupdate"
     reboot = "reboot"
 

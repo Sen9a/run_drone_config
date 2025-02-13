@@ -26,26 +26,26 @@ class BetaFlight:
     def connect(self):
         try:
             if self.connection is None:
-                with serial.Serial(port=self.port, baudrate=self.baudrate, bytesize=self.bytesize, parity=self.parity,
-                                   timeout=self.timeout) as conn:
-                    self.connection = conn
-                    yield self
+                self.connection = serial.Serial(port=self.port, baudrate=self.baudrate, bytesize=self.bytesize, parity=self.parity,
+                                   timeout=self.timeout)
+                yield self
         except Exception as e:
-            traceback.print_tb(e.__traceback__)
             print(e)
+            raise e
         finally:
-            self.connection = None
+            if self.connection and self.connection.is_open:
+                self.connection.close()
             print('Connection closed')
 
 
     def execute_command(self, command: str):
         if self.connection.is_open:
-            command = command.strip()
             try:
                 print(f"Executing command:\n{command}\n")
                 command = command + '\r\n'
                 self.connection.write(command.encode('utf-8'))
-                self.connection.flush()
+                if self.connection.is_open:
+                    self.connection.flush()
             except Exception as e:
                 print(f"Connection closed, please retry, exception is: {str(e)}")
 
@@ -53,21 +53,23 @@ class BetaFlight:
         response = ''
         if self.connection.is_open:
             current_time = datetime.utcnow()
-            while (datetime.utcnow() - current_time).seconds < self.read_wait_max_time:
-                response_btf = self.connection.read(self.connection.in_waiting).decode('utf-8').strip()
-                if response_btf.endswith(self.read_all_string_marker):
-                    response += response_btf
-                    print("Response block:")
-                    if response and ErrorString.ERROR in response:
-                        print(f"{Fore.RED}{response}{Style.RESET_ALL}")
+            try:
+                while (datetime.utcnow() - current_time).seconds < self.read_wait_max_time:
+                    response_btf = self.connection.read(self.connection.in_waiting).decode('utf-8').strip()
+                    if response_btf.endswith(self.read_all_string_marker):
+                        response += response_btf
+                        print("Response block:")
+                        if response and ErrorString.ERROR in response:
+                            print(f"{Fore.RED}{response}{Style.RESET_ALL}")
+                        else:
+                            print(response)
+                        return response
                     else:
-                        print(response)
-                    return response
+                        response += response_btf
                 else:
-                    response += response_btf
-            else:
-                response += "ERROR: Time Out"
-
+                    response += "ERROR: Time Out"
+            except Exception as e:
+                 print(f"Connection closed, please retry, exception is: {str(e)}")
         else:
             response += 'ERROR: Connection closed, please retry'
         return response

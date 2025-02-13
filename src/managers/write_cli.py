@@ -1,5 +1,7 @@
 from dataclasses import dataclass
-from typing import Optional
+from typing import Dict, Any
+
+from fastapi import UploadFile
 
 from src.client.betaflight import BetaFlightClient
 from src.const import ErrorString
@@ -7,21 +9,24 @@ from src.const import ErrorString
 
 @dataclass
 class WriteCli:
-    betaflight_client: BetaFlightClient
-    file_source: Optional[str] = None
+    beta_flight_client: BetaFlightClient
 
 
-    def run(self):
-        if self.file_source:
-            with open(self.file_source, "r") as file:
-                with self.betaflight_client.connect() as client:
+    def run(self, file: UploadFile) -> Dict[str, Any]:
+        if file:
+            try:
+                with self.beta_flight_client.connect() as client:
                     with client.cli_mode():
                         response = client.read_response()
                         print(response)
-                        for line in file:
-                            if not line.startswith("#") and line.strip("\n"):
+                        for line in file.file:
+                            file_line = line.decode('utf-8')
+                            if not file_line.startswith("#") and (file_line := file_line.strip()):
                                 print("-" * 100)
-                                client.execute(line)
+                                client.execute(file_line)
                                 response = client.read_response()
                                 if ErrorString.ERROR_IN_SAVE in response:
                                     client.send_save_command()
+            except Exception as e:
+                return {'status':'Error', 'message': str(e)}
+        return {'status':'Success', 'message': 'Config saved successfully'}
