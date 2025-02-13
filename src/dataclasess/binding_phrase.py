@@ -1,6 +1,9 @@
 from dataclasses import dataclass, field
 from typing import List, Any
 
+import settings
+from src.settings import setting
+
 
 @dataclass
 class BindingPhrase:
@@ -10,5 +13,5 @@ class BindingPhrase:
     modelid: int = 0
     force_tlm: int = 0
     vbind: int = 0
-    uid: List[int] = field(default_factory=lambda: [6, 213, 167, 188, 3, 52])
+    uid: List[int] = field(default_factory=lambda: setting.bind_value.split(','))
     pwm: List[Any] = field(default_factory=list)

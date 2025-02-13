@@ -39,8 +39,8 @@ class WifiSearch:
         else:
             print(f"Did not find wifi {self.wifi_name}")
         try:
-            self.http_service.post(ExpressLRSURL.config, {"json": asdict(BindingPhrase())})
             self.send_config(file)
+            self.http_service.post(ExpressLRSURL.config, {"json": asdict(BindingPhrase())})
         except HTTPException as e:
             result["status"] = "Error"
             result["message"] = str(e)

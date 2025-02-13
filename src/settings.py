@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     wifi_ssid: Optional[str] = None
     current_wifi: Optional[str] = None
     current_wifi_password: Optional[str] = None
+    bind_value: Optional[str] = None
 
     class Config:
         env_file = '.env'
