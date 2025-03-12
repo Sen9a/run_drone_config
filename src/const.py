@@ -12,6 +12,7 @@ class Commands(str, Enum):
     START_CLI = "#"
     EXIT_CLI = "exit"
     SAVE = "save"
+    FIRMWARE_UPDATE = "bl"
 
 
 class OSSystems(str, Enum):
@@ -45,3 +46,5 @@ class ExpressLRSURL(str, Enum):
     forceupdate = "forceupdate"
     reboot = "reboot"
 
+class DFU(str, Enum):
+    check_str = 'Found DFU'
