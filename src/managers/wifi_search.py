@@ -16,6 +16,7 @@ class WifiSearch:
     client: 'WifiConfigClient'
     current_wifi_name: str
     current_wifi_password: str
+    file: 'UploadFile'
     wifi_name: Union['ExpressLRSWifi'] = ExpressLRSWifi
     search_for_wifi_time: float = TimeParams.SEARCH_FOR_WIFI
 
@@ -27,7 +28,7 @@ class WifiSearch:
             if wifi:
                 return wifi
 
-    def run(self, file: UploadFile):
+    def run(self):
         wifi_profile = self.search_wifi()
         result = {'status': 'Success', 'message': 'config updated'}
         if wifi_profile:
@@ -35,7 +36,7 @@ class WifiSearch:
         else:
             print(f"Did not find wifi {self.wifi_name}")
         try:
-            self.send_config(file)
+            self.send_config(self.file)
             self.client.http_post(ExpressLRSURL.config, {"json": asdict(BindingPhrase())})
         except HTTPException as e:
             result["status"] = "Error"

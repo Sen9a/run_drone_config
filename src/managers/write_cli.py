@@ -12,16 +12,17 @@ if TYPE_CHECKING:
 @dataclass
 class WriteCli:
     beta_flight_client: 'BetaFlightClient'
+    file: 'UploadFile'
 
 
-    def run(self, file: UploadFile) -> Dict[str, Any]:
+    def run(self) -> Dict[str, Any]:
         result = {'status':'Success', 'message': 'Config saved successfully'}
         try:
             with self.beta_flight_client.connect() as client:
                 with client.cli_mode():
                     response = client.read_response()
                     print(response)
-                    for line in file.file:
+                    for line in self.file.file:
                         file_line = line.decode('utf-8')
                         if not file_line.startswith("#") and (file_line := file_line.strip()):
                             print("-" * 100)
