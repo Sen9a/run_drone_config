@@ -21,12 +21,9 @@ class HttpService:
             print("Response text:", response.text)
             return response.status_code, response.text
 
-    def post(self, patch: str, body: Dict[str, Any], headers: Dict[str, Any] = None) -> Union[Tuple[int, str], Tuple[int, Dict[str, Any]]]:
+    def post(self, patch: str, **kwargs) -> Union[Tuple[int, str], Tuple[int, Dict[str, Any]]]:
         url = parse.urljoin(self.url, patch)
-        payload = {**body}
-        if headers:
-            payload = {**payload, "headers": {**headers}}
-        response = requests.post(url, **payload)
+        response = requests.post(url, **kwargs)
         status_code, data = self.parse_response(response)
         if status_code in (HTTPStatus.OK, HTTPStatus.CREATED, HTTPStatus.NO_CONTENT):
             return status_code, data
