@@ -1,18 +1,17 @@
+import time
 from dataclasses import dataclass, asdict
 from datetime import datetime
-from http import HTTPStatus
 from http.client import HTTPException
 from typing import Union
-from urllib.parse import urljoin
 
 from fastapi import UploadFile
+import requests
 
 from src.const import TimeParams, ExpressLRSWifi, ExpressLRSURL
 from src.dataclasess import BindingPhrase
 from src.service import WifiConfig
 from src.service.http_service import HttpService
-import requests
-from requests_toolbelt import MultipartEncoder
+
 
 @dataclass
 class WifiSearch:
@@ -32,31 +31,48 @@ class WifiSearch:
                 return wifi
 
     def run(self, file: UploadFile):
-        wifi_profile = self.search_wifi()
         result = {'status': 'Success', 'message': 'config updated'}
-        if wifi_profile:
-            self.service.connect_to_wifi(wifi_profile.ssid, self.wifi_name.password)
-        else:
-            print(f"Did not find wifi {self.wifi_name}")
         try:
-            self.send_config(file)
-            self.http_service.post(ExpressLRSURL.config, {"json": asdict(BindingPhrase())})
+            self.update_firmware(file)
+            print(f'Waiting until reload for {TimeParams.WAIT_UNTIL_RELOAD}')
+            time.sleep(TimeParams.WAIT_UNTIL_RELOAD)
+            self.update_bind_phrase()
         except HTTPException as e:
             result["status"] = "Error"
             result["message"] = str(e)
         self.service.connect_to_wifi(self.current_wifi_name, self.current_wifi_password)
         return result
 
+    def update_firmware(self, file: UploadFile):
+        wifi_profile = self.search_wifi()
+        if wifi_profile:
+            self.service.connect_to_wifi(wifi_profile.ssid, self.wifi_name.password)
+            self.send_config(file)
+        else:
+            print(f"Did not find wifi {self.wifi_name}")
+
+    def update_bind_phrase(self):
+        wifi_profile = self.search_wifi()
+        if wifi_profile:
+            self.service.connect_to_wifi(wifi_profile.ssid, self.wifi_name.password)
+            time.sleep(3)
+            self.http_service.post(ExpressLRSURL.config, json=asdict(BindingPhrase()))
+            self.service.connect_to_wifi(self.current_wifi_name, self.current_wifi_password)
+
     def send_config(self, file: UploadFile):
         file.file.seek(0, 2)  # Seek to the end of the file
         file_size = file.file.tell()  # Get the file size in bytes
         file.file.seek(0)  #
-
         files = {'upload': (file.filename, file.file.read(), file.content_type)}
         headers = {
             "X-FileSize": str(file_size)
         }
-        _, response = self.http_service.post(ExpressLRSURL.update,
-                                          {"files":files},
-                                             headers=headers)
+        response = {'response': 'test'}
+        try:
+            _, response = self.http_service.post(ExpressLRSURL.update,
+                                                 files=files,
+                                                 headers=headers,
+                                                 timeout=60)
+        except requests.exceptions.ReadTimeout:
+            print("ELRS doesn't send response")
         return response

@@ -27,8 +27,9 @@ class NetworkCommands(str, Enum):
     NAME = "name"
 
 class TimeParams(float, Enum):
-    SEARCH_FOR_WIFI = 90
+    SEARCH_FOR_WIFI = 500
     READ_WAIT_MAX = 5
+    WAIT_UNTIL_RELOAD = 60
 
 class EndResponseMarkers(str, Enum):
     END_OF_BETAFLIGHT_CLI = "\n#"
