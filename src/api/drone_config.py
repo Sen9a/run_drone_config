@@ -44,9 +44,10 @@ def post_config(beta_flight_config: Optional[UploadFile] = File(None),
                                   setting.current_wifi,
                                   setting.current_wifi_password,
                                   rx_config)
-        manager_map = {beta_flight_firmware: firmware_manager,
-                       beta_flight_config: beta_flight_manager,
-                       rx_config: wifi_manager}
-        for file in [beta_flight_config, rx_config, beta_flight_firmware]:
-            ConfigResponse(**manager_map[file].run())
+        if beta_flight_firmware:
+            response.beta_flight_firmware = ConfigResponse(**firmware_manager.run())
+        if beta_flight_config:
+            response.beta_flight_config = ConfigResponse(**beta_flight_manager.run())
+        if rx_config:
+            response.rx_config = ConfigResponse(**wifi_manager.run())
         return response

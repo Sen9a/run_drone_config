@@ -10,6 +10,9 @@ import requests
 from src.const import TimeParams, ExpressLRSWifi, ExpressLRSURL
 from src.dataclasess import BindingPhrase
 
+if TYPE_CHECKING:
+    from src.client import WifiConfigClient
+
 
 @dataclass
 class WifiSearch:
@@ -67,10 +70,10 @@ class WifiSearch:
         }
         response = {'response': 'test'}
         try:
-            _, response = self.client.post(ExpressLRSURL.update,
-                                                 files=files,
-                                                 headers=headers,
-                                                 timeout=60)
+            _, response = self.client.http_post(ExpressLRSURL.update,
+                                                files=files,
+                                                headers=headers,
+                                                timeout=60)
         except requests.exceptions.ReadTimeout:
             print("ELRS doesn't send response")
         return response

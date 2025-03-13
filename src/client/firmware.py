@@ -17,5 +17,5 @@ class FirmwareClient:
         return self.service.execute_dfu_update(file.name)
 
     def crate_intel_obj(self, source_file: 'NamedTemporaryFile', target_file: 'NamedTemporaryFile'):
-        return self.service.crate_intel_obj(source_file, target_file)
+        return self.service.crate_intel_obj(source_file.name, target_file.name)
 

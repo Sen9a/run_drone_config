@@ -16,5 +16,5 @@ class WifiConfigClient:
     def connect_to_wifi(self, ssid: str, password: str):
         return self.wifi_config.connect_to_wifi(ssid, password)
 
-    def http_post(self, url: str, data: Dict[str, Any], headers: Dict[str, str] = None) -> Tuple[int, Dict[str, Any]]:
-        return self.http_service.post(url, data, headers)
+    def http_post(self, url: str, **kwargs) -> Tuple[int, Dict[str, Any]]:
+        return self.http_service.post(url, **kwargs)
