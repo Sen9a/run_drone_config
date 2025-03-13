@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Generator
+from typing import TYPE_CHECKING, Generator, Any
 import time
 
 from src.const import Commands
@@ -23,7 +23,7 @@ class BetaFlightClient:
             raise e
 
     @contextmanager
-    def cli_mode(self) -> None:
+    def cli_mode(self) -> Generator[None, Any, None]:
         try:
             self.service.execute_command(Commands.START_CLI)
             print("Enter cli mode")

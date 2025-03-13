@@ -35,6 +35,7 @@ class BetaFlight:
         finally:
             if self.connection and self.connection.is_open:
                 self.connection.close()
+                self.connection = None
             print('Connection closed')
 
 

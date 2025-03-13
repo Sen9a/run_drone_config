@@ -396,6 +396,17 @@ files = [
 all = ["flake8 (>=7.1.1)", "mypy (>=1.11.2)", "pytest (>=8.3.2)", "ruff (>=0.6.2)"]
 
 [[package]]
+name = "intelhex"
+version = "2.3.0"
+description = "Python library for Intel HEX files manipulations"
+optional = false
+python-versions = "*"
+files = [
+    {file = "intelhex-2.3.0-py2.py3-none-any.whl", hash = "sha256:87cc5225657524ec6361354be928adfd56bcf2a3dcc646c40f8f094c39c07db4"},
+    {file = "intelhex-2.3.0.tar.gz", hash = "sha256:892b7361a719f4945237da8ccf754e9513db32f5628852785aea108dcd250093"},
+]
+
+[[package]]
 name = "itsdangerous"
 version = "2.2.0"
 description = "Safely pass data to untrusted environments and back."
@@ -614,6 +625,16 @@ files = [
     {file = "orjson-3.10.15-cp39-cp39-win32.whl", hash = "sha256:a2f708c62d026fb5340788ba94a55c23df4e1869fec74be455e0b2f5363b8507"},
     {file = "orjson-3.10.15-cp39-cp39-win_amd64.whl", hash = "sha256:efcf6c735c3d22ef60c4aa27a5238f1a477df85e9b15f2142f9d669beb2d13fd"},
     {file = "orjson-3.10.15.tar.gz", hash = "sha256:05ca7fe452a2e9d8d9d706a2984c95b9c2ebc5db417ce0b7a49b91d50642a23e"},
+]
+
+[[package]]
+name = "progress"
+version = "1.6"
+description = "Easy to use progress bars"
+optional = false
+python-versions = "*"
+files = [
+    {file = "progress-1.6.tar.gz", hash = "sha256:c9c86e98b5c03fa1fe11e3b67c1feda4788b8d0fe7336c2ff7d5644ccfba34cd"},
 ]
 
 [[package]]
@@ -845,6 +866,17 @@ files = [
 ]
 
 [[package]]
+name = "pyusb"
+version = "1.3.1"
+description = "Easy USB access for Python"
+optional = false
+python-versions = ">=3.9.0"
+files = [
+    {file = "pyusb-1.3.1-py3-none-any.whl", hash = "sha256:bf9b754557af4717fe80c2b07cc2b923a9151f5c08d17bdb5345dac09d6a0430"},
+    {file = "pyusb-1.3.1.tar.gz", hash = "sha256:3af070b607467c1c164f49d5b0caabe8ac78dbed9298d703a8dbf9df4052d17e"},
+]
+
+[[package]]
 name = "pywifi"
 version = "1.1.12"
 description = "A cross-platform module for manipulating WiFi devices."
@@ -1026,6 +1058,25 @@ typing-extensions = {version = ">=3.10.0", markers = "python_version < \"3.10\""
 
 [package.extras]
 full = ["httpx (>=0.27.0,<0.29.0)", "itsdangerous", "jinja2", "python-multipart (>=0.0.18)", "pyyaml"]
+
+[[package]]
+name = "stm32loader"
+version = "0.7.1"
+description = "Flash firmware to STM32 microcontrollers using Python."
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "stm32loader-0.7.1-py3-none-any.whl", hash = "sha256:47089d32b3fb8b84c197ef379f5bef30fcee691e4f0bf547144ab43127fed987"},
+    {file = "stm32loader-0.7.1.tar.gz", hash = "sha256:4132d2123749b431f81826a69ca1cde691235b8d6b46d00c5f1c9964c3392b7c"},
+]
+
+[package.dependencies]
+progress = "*"
+pyserial = "*"
+
+[package.extras]
+dev = ["black", "bump-my-version", "cogapp", "flake8", "flake8-isort", "nox", "pylint", "twine", "wheel"]
+hex = ["intelhex"]
 
 [[package]]
 name = "typer"
@@ -1400,4 +1451,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "e77944320376d3f059214e4091c97c815b97ca26b04c9a67f109b2bc3e4965df"
+content-hash = "0d0dc1621680e58d17e41b7632c6371f819fd757aabfd9936c144ae96e614314"
