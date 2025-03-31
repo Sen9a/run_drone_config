@@ -2,7 +2,6 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
-import traceback
 from src.settings import setting
 
 import serial

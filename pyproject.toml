@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "This project is applying the configs to the connected drone using the config file"
 authors = ["Oleh Senyshyn"]
 readme = "README.md"
-packages = [{include = "run_drone_config"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"

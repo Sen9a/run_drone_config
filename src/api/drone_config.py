@@ -31,7 +31,7 @@ def post_config(beta_flight_config: Optional[UploadFile] = File(None),
         config_response = ConfigResponse(status='Error', message='No config file provided')
         return config_response
     else:
-        beta_flight_service = BetaFlight(setting.port)
+        beta_flight_service = BetaFlight(setting.usb_port)
         beta_flight_client = BetaFlightClient(beta_flight_service)
         beta_flight_manager = WriteCli(beta_flight_client, beta_flight_config)
         firmware_service = FirmwareService()

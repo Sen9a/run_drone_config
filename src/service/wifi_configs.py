@@ -1,32 +1,34 @@
 import subprocess
 import time
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import pywifi
-from pywifi import const
-
-from src.const import OSSystems
 
 if TYPE_CHECKING:
     from pywifi import PyWiFi
+    from pywifi.iface import Interface
 
 
 @dataclass
 class WifiConfig:
     wifi: 'PyWiFi' = pywifi.PyWiFi()
+    interface: Optional['Interface'] = None
 
-    def __post_init__(self):
-        self.interface = next(iter(self.wifi.interfaces()), None)
+    @property
+    def get_interface(self) -> 'Interface':
+        if self.interface is None:
+            self.interface = next(iter(self.wifi.interfaces()), None)
+        return self.interface
 
     def search_available_wifi(self):
-        self.interface.scan()
+        self.get_interface.scan()
         print("Scanning wifi please wait...")
         time.sleep(3)
         return self.interface.scan_results()
 
     def disconnect_wifi(self):
-        self.interface.disconnect()
+        self.get_interface.disconnect()
 
     @staticmethod
     def connect_to_wifi(name: str, password: str):
