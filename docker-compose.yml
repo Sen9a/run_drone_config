@@ -1,0 +1,16 @@
+services:
+  app:
+    restart: always
+    container_name: drone-configurator
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    env_file:
+      - .env
+    environment:
+      - PORT=8082
+    ports:
+      - "8082:8082"
+    volumes:
+      - /dev:/dev
+    privileged: true
