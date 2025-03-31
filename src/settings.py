@@ -3,7 +3,7 @@ from typing import Optional
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    port: str = '/dev/ttyACM0'
+    usb_port: str = '/dev/ttyACM0'
     baudrate: int = 115200
     read_wait_max: int = 5
     timeout: int = 30

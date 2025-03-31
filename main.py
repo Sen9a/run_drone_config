@@ -9,7 +9,7 @@ from src.service import BetaFlight, WifiConfig
 from src.service.http_service import HttpService
 
 parser = argparse.ArgumentParser('Apply the betaflight configs')
-parser.add_argument('--port', type=str, help='What port to read', default=None)
+parser.add_argument('--usb_port', type=str, help='What usb_port to read', default=None)
 parser.add_argument('--beta_flight_config', type=str, help='Path to config file', default=None)
 parser.add_argument('--rx_config', type=str, help='Path to config file for the RX', default=None)
 parser.add_argument('--current_wifi',
