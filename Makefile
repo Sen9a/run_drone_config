@@ -1,7 +1,7 @@
 build-server:
 	docker-compose build app
 server:
-	docker-compose run -d app
+	docker-compose up -d app
 stop-server:
 	docker-compose stop app
 rm-server:
