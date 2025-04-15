@@ -13,4 +13,6 @@ services:
       - "8082:8082"
     volumes:
       - /dev:/dev
+    devices:
+    - /dev/ttyACM0:/dev/ttyACM0
     privileged: true

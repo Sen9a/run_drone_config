@@ -1,5 +1,5 @@
 build-server:
-	docker-compose build app
+	docker-compose build --no-cache app
 server:
 	docker-compose up -d app
 stop-server:

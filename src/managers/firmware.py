@@ -22,10 +22,9 @@ class FirmwareManager:
         try:
             with self.beta_flight_client.connect() as client:
                 with client.cli_mode():
-                    response = client.read_response()
-                    print(response)
+                    client.read_response()
                     client.execute(Commands.FIRMWARE_UPDATE)
-                    time.sleep(4)
+                    time.sleep(10)
                     with tempfile.TemporaryDirectory() as tmp_directory:
                         hex_file = tempfile.NamedTemporaryFile(dir=tmp_directory, suffix='.hex', delete=False)
                         bin_file = tempfile.NamedTemporaryFile(dir=tmp_directory, suffix='.bin', delete=False)
