@@ -13,6 +13,7 @@ services:
       - "8082:8082"
     volumes:
       - /dev:/dev
+      - /var/run/wpa_supplicant:/var/run/wpa_supplicant
     devices:
     - /dev/ttyACM0:/dev/ttyACM0
     privileged: true
