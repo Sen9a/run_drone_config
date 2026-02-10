@@ -10,7 +10,7 @@ services:
     environment:
       - PORT=8082
     ports:
-      - "8082:8082"
+      - "8083:8082"
     volumes:
       - /dev:/dev
       - /var/run/wpa_supplicant:/var/run/wpa_supplicant
